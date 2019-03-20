@@ -1,0 +1,74 @@
+MODULE: ConnectPins
+-------
+
+DESCRIPTION:
+------------
+The ConnectPins module allows you to control your switch
+matrix. You can connect the instrument terminals to one or
+more DUT pins. If the DUT pin number is less than 1, then
+that connection is ignored (not performed), otherwise the
+specified instrument is connected to the desired DUT pin.
+If you wish to connect an instrument to more than one DUT
+pin, you may specify that instrument terminal again in the
+parameter list.
+
+If the OpenAll parameter is 1, then all previous matrix
+connections are cleared before making the new connections.
+If the OpenAll parameter is 0 (zero), then NO matrix
+connections are cleared before making new connections.
+
+
+INPUTS:
+-------
+OpenAll           (int) A flag that controls whether the
+                  switch matrix is first cleared before
+                  making any new connections. If this
+                  parameter is set to 1, then all previous
+                  connections are cleared, otherwise they
+                  are left intact. Valid inputs: 0 or 1
+
+TermIdStr1 -      (char *) The terminal identification string.
+TermIdStr8        This refers to a instrument as defined
+                  by KCON. Valid inputs (configuration
+                  dependent) are: SMUn, CMTRn, CMTRnL, PGUn,
+                  GPIn, GPInL, GNDU (where n is number from 1
+                  through 8).
+
+Pin1 - Pin8      (int) The DUT pin number (configuration
+                 dependent) to which the instrument will
+                 be attached. If a number less than 1 is
+                 specified, then no connection will be made.
+                 Valid inputs: -1 to 72.
+
+
+OUTPUTS:
+--------
+-none-
+
+
+RETURN VALUES:
+--------------
+0           OK.
+
+-10000      (INVAL_INST_ID) An invalid instrument ID was
+            specified. This generally means that there is
+            no instrument with the specified ID in your
+            configuration.
+
+-10001      (INVAL_PIN_SPEC) An invalid DUT pin number
+            was specified.
+
+-10003      (NO_SWITCH_MATRIX) No switch matrix was found.
+
+-10004      (NO_MATRIX_CARDS) No matrix cards were found.
+
+
+EXAMPLE:
+--------
+To connect SMU1 to pin 7, SMU2 to pin 8, SMU3 to pin 12,
+SMU4 to pin 1, ground pin 15, connect the pulse generator
+to pin 13, connect the CMTR to pins 9 and 10, and clear the
+previous connections:
+
+    ConnectPins(1, SMU1, 7, SMU2, 8, SMU3, 12, SMU4, 1, GNDU, 15
+    PGU1, 13, CMTR1, 9, CMTR1L, 10)
